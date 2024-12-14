@@ -1,4 +1,5 @@
-const {GrammyError, HttpError} = require("grammy");
+const {GrammyError, HttpError, InlineKeyboard} = require("grammy");
+const { getWeather } = require('../requests/weather.js');
 
 module.exports = (bot) => {
     bot.command('start', async (ctx) => {
@@ -9,10 +10,25 @@ module.exports = (bot) => {
     });
 
     bot.command('weather', async (ctx) => {
-        await ctx.reply('Requesting weather...', {
-            reply_parameters: {message_id: ctx.message.message_id }
+        const keyboard = new InlineKeyboard()
+            .text('Calgary', 'Calgary')
+            .text('Tiraspol', 'Tiraspol')
+            .text('Belgorod', 'Belgorod')
+            .text('Krasnodar', 'Krasnodar');
+
+        await ctx.reply('What city?', {
+            reply_parameters: {message_id: ctx.message.message_id },
+            reply_markup: keyboard
         })
     })
+
+    bot.on('callback_query:data', async (ctx) => {
+        const city = ctx.callbackQuery.data;
+        let weather = await getWeather(city);
+        await ctx.reply(`Weather in ${city}: ${weather}`);
+        await ctx.editMessageReplyMarkup({inline_keyboard: []});
+        await ctx.answerCallbackQuery();
+    });
 
     bot.command('reminder', async (ctx) => {
         await ctx.reply('Remind you of what?', {
