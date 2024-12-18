@@ -11,7 +11,7 @@ const getWeather = async (city) => {
         return `Temperature: ${temperature}°C, Condition: ${condition}`;
     } catch (error) {
         console.error("Error fetching weather data:", error);
-        return "Sorry, there was an error getting the weather.";
+        return "Sorry, I couldn't find this city.";
     }
 };
 
