@@ -8,8 +8,9 @@ const getWeather = async (city) => {
         const temperature = weatherData.current.temp_c;
         const condition = weatherData.current.condition.text;
         const air = weatherData.current.air_quality.pm2_5;
+        const country = weatherData.location.country;
 
-        return `Temperature: ${temperature}°C, Condition: ${condition}, Air Quality:` + await airQuality(air);
+        return `Country: ${country}, Temperature: ${temperature}°C, Condition: ${condition}, Air Quality:` + await airQuality(air);
     } catch (error) {
         console.error("Error fetching weather data:", error);
         return "Sorry, I couldn't find this city.";
